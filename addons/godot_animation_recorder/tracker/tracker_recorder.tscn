@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://djcm4e8e6dwbf"]
+
+[ext_resource type="Script" path="res://addons/godot_animation_recorder/tracker/tracker_recorder.gd" id="1_hltjl"]
+
+[node name="TrackerRecorder" type="Node"]
+script = ExtResource("1_hltjl")
