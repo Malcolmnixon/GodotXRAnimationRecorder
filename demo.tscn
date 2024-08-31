@@ -1,11 +1,13 @@
-[gd_scene load_steps=16 format=3 uid="uid://c02r4tj8rqvmo"]
+[gd_scene load_steps=18 format=3 uid="uid://c02r4tj8rqvmo"]
 
 [ext_resource type="Texture2D" uid="uid://drjoya1j38i21" path="res://assets/ambientcg.com/Carpet003_1K-JPG_Color.jpg" id="1_e6qef"]
 [ext_resource type="Script" path="res://demo.gd" id="1_pjmhy"]
 [ext_resource type="PackedScene" uid="uid://djcm4e8e6dwbf" path="res://addons/godot_animation_recorder/tracker/tracker_recorder.tscn" id="3_mxy32"]
 [ext_resource type="PackedScene" uid="uid://bhc6nngwjdvum" path="res://assets/test_chan/Test-Chan.fbx" id="3_rdwmc"]
 [ext_resource type="PackedScene" uid="uid://b36qa4p6kl7k1" path="res://addons/godot_animation_recorder/tracker/tracker_player.tscn" id="4_1qj27"]
-[ext_resource type="PackedScene" uid="uid://cay8oh2ll7yxi" path="res://assets/test_kun/Test-Kun.fbx" id="4_2lusk"]
+[ext_resource type="PackedScene" uid="uid://2isowy6soqqc" path="res://addons/godot_animation_recorder/animation/animation_recorder.tscn" id="5_cqdnw"]
+[ext_resource type="PackedScene" uid="uid://b8o5ttblgrkx1" path="res://assets/ready_player_me/male.glb" id="7_2ksda"]
+[ext_resource type="PackedScene" uid="uid://ee6y0cor2nrp" path="res://assets/ready_player_me/female.glb" id="8_embxr"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_o2dlm"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -74,52 +76,96 @@ right_hand_tracker_name = &""
 [node name="TrackerPlayer" parent="." instance=ExtResource("4_1qj27")]
 unique_name_in_owner = true
 
-[node name="Chan" type="Node3D" parent="."]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.6, 0, 0)
+[node name="AnimationRecorder" parent="." node_paths=PackedStringArray("skeleton", "face") instance=ExtResource("5_cqdnw")]
+unique_name_in_owner = true
+skeleton = NodePath("../Mixing/Avatar/male/Armature/Skeleton3D")
+face = NodePath("../Mixing/Avatar/male/Armature/Skeleton3D/Wolf3D_Avatar")
 
-[node name="ChanAvatar" type="XRNode3D" parent="Chan"]
+[node name="Tracking" type="Node3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -1.2, 0, 0)
+
+[node name="Avatar" type="XRNode3D" parent="Tracking"]
 transform = Transform3D(0.999311, 0, 0.0371093, 0, 1, 0, -0.0371093, 0, 0.999311, -0.00895814, 0, -0.0917108)
 tracker = &"/rokoko/body_tracker"
 
-[node name="Test-Chan" parent="Chan/ChanAvatar" instance=ExtResource("3_rdwmc")]
+[node name="Test-Chan" parent="Tracking/Avatar" instance=ExtResource("3_rdwmc")]
 
-[node name="XRBodyModifier3D" type="XRBodyModifier3D" parent="Chan/ChanAvatar/Test-Chan/Armature/Skeleton3D" index="2"]
+[node name="XRBodyModifier3D" type="XRBodyModifier3D" parent="Tracking/Avatar/Test-Chan/Armature/Skeleton3D" index="2"]
+transform = Transform3D(0.997246, 0, -0.0741677, 0, 1, 0, 0.0741677, 0, 0.997246, 0.000939012, 0, 0.0443274)
 body_tracker = &"/vmc/body_tracker"
 bone_update = 1
 
-[node name="XRFaceModifier3D" type="XRFaceModifier3D" parent="Chan/ChanAvatar"]
+[node name="Label3D" type="Label3D" parent="Tracking/Avatar/Test-Chan/Armature/Skeleton3D" index="3"]
+transform = Transform3D(0.997246, 0, -0.0741677, 0, 1, 0, 0.0741677, 0, 0.997246, 0, 2, 0)
+billboard = 2
+text = "Live
+Tracking"
+
+[node name="XRFaceModifier3D" type="XRFaceModifier3D" parent="Tracking/Avatar"]
 face_tracker = &"/vmc/face_tracker"
 target = NodePath("../Test-Chan/Armature/Skeleton3D/Body")
 
-[node name="GroundRing" type="MeshInstance3D" parent="Chan/ChanAvatar"]
+[node name="GroundRing" type="MeshInstance3D" parent="Tracking/Avatar"]
 mesh = SubResource("TorusMesh_hgul2")
 skeleton = NodePath("../Test-Chan")
 
-[node name="Forward" type="MeshInstance3D" parent="Chan/ChanAvatar/GroundRing"]
+[node name="Forward" type="MeshInstance3D" parent="Tracking/Avatar/GroundRing"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, -0.6)
 mesh = SubResource("SphereMesh_ouj5y")
 
-[node name="Kun" type="Node3D" parent="."]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.6, 0, 0)
+[node name="Mixing" type="Node3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 
-[node name="KunAvatar" type="XRNode3D" parent="Kun"]
+[node name="Avatar" type="XRNode3D" parent="Mixing"]
 transform = Transform3D(0.999311, 0, 0.0371093, 0, 1, 0, -0.0371093, 0, 0.999311, -0.00895814, 0, -0.0917108)
 tracker = &"/rokoko/body_tracker"
 
-[node name="Test-Kun" parent="Kun/KunAvatar" instance=ExtResource("4_2lusk")]
+[node name="male" parent="Mixing/Avatar" instance=ExtResource("7_2ksda")]
 
-[node name="XRBodyModifier3D" type="XRBodyModifier3D" parent="Kun/KunAvatar/Test-Kun/Armature/Skeleton3D" index="2"]
+[node name="XRBodyModifier3D" type="XRBodyModifier3D" parent="Mixing/Avatar/male/Armature/Skeleton3D" index="1"]
+transform = Transform3D(-0.999311, 0, 0.0371094, 0, 1, 0, -0.0371094, 0, -0.999311, 0.00554865, 0, 0.0919801)
 body_tracker = &"/recording/body_tracker"
 bone_update = 1
 
-[node name="XRFaceModifier3D" type="XRFaceModifier3D" parent="Kun/KunAvatar"]
-face_tracker = &"/recording/face_tracker"
-target = NodePath("../Test-Kun/Armature/Skeleton3D/Body")
+[node name="Label3D" type="Label3D" parent="Mixing/Avatar/male/Armature/Skeleton3D" index="2"]
+transform = Transform3D(-0.999311, 0, 0.0371094, 0, 1, 0, -0.0371094, 0, -0.999311, 0.00554865, 2, 0.0919801)
+billboard = 2
+text = "Mixing"
 
-[node name="GroundRing" type="MeshInstance3D" parent="Kun/KunAvatar"]
+[node name="XRFaceModifier3D" type="XRFaceModifier3D" parent="Mixing/Avatar"]
+face_tracker = &"/recording/face_tracker"
+target = NodePath("../male/Armature/Skeleton3D/Wolf3D_Avatar")
+
+[node name="GroundRing" type="MeshInstance3D" parent="Mixing/Avatar"]
 mesh = SubResource("TorusMesh_hgul2")
 
-[node name="Forward" type="MeshInstance3D" parent="Kun/KunAvatar/GroundRing"]
+[node name="Forward" type="MeshInstance3D" parent="Mixing/Avatar/GroundRing"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, -0.6)
+mesh = SubResource("SphereMesh_ouj5y")
+
+[node name="Playing" type="Node3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1.2, 0, 0)
+
+[node name="Avatar" type="XRNode3D" parent="Playing"]
+transform = Transform3D(0.999311, 0, 0.0371093, 0, 1, 0, -0.0371093, 0, 0.999311, -0.00895814, 0, -0.0917108)
+tracker = &"/rokoko/body_tracker"
+
+[node name="female" parent="Playing/Avatar" instance=ExtResource("8_embxr")]
+
+[node name="Label3D" type="Label3D" parent="Playing/Avatar/female/Armature/Skeleton3D" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+billboard = 2
+text = "Playing"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Playing/Avatar/female"]
+unique_name_in_owner = true
+root_node = NodePath("../Armature")
+
+[node name="GroundRing" type="MeshInstance3D" parent="Playing/Avatar"]
+mesh = SubResource("TorusMesh_hgul2")
+skeleton = NodePath("")
+
+[node name="Forward" type="MeshInstance3D" parent="Playing/Avatar/GroundRing"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, -0.6)
 mesh = SubResource("SphereMesh_ouj5y")
 
@@ -148,25 +194,95 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="PanelContainer/MarginContainer/HBoxContainer"]
 layout_mode = 2
-text = "Godot XR Animation Recorder"
+text = "Godot XR 
+Animation Recorder"
 horizontal_alignment = 1
 
 [node name="VSeparator" type="VSeparator" parent="PanelContainer/MarginContainer/HBoxContainer"]
 layout_mode = 2
 
-[node name="RecordButton" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer"]
+[node name="GridContainer" type="GridContainer" parent="PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="RecordButton" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer/GridContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 toggle_mode = true
 text = "Record"
 
-[node name="PlayButton" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer"]
+[node name="RecordLabel" type="Label" parent="PanelContainer/MarginContainer/HBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Record tracker streams"
+
+[node name="MixButton" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer/GridContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
+disabled = true
+text = "Mix"
+
+[node name="MixLabel" type="Label" parent="PanelContainer/MarginContainer/HBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Mix trackers / record Animation"
+
+[node name="LoadButton" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer/GridContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+text = "Load"
+
+[node name="LoadLabel" type="Label" parent="PanelContainer/MarginContainer/HBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Load animation"
+
+[node name="PlayButton" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer/GridContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+disabled = true
 text = "Play"
 
-[connection signal="toggled" from="PanelContainer/MarginContainer/HBoxContainer/RecordButton" to="." method="_on_record_button_toggled"]
-[connection signal="pressed" from="PanelContainer/MarginContainer/HBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
+[node name="PlayLabel" type="Label" parent="PanelContainer/MarginContainer/HBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Play animation"
 
-[editable path="Chan/ChanAvatar/Test-Chan"]
-[editable path="Kun/KunAvatar/Test-Kun"]
+[node name="SaveButton" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+disabled = true
+text = "Save"
+
+[node name="SaveLabel" type="Label" parent="PanelContainer/MarginContainer/HBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Save animation to file"
+
+[node name="LoadDialog" type="FileDialog" parent="."]
+unique_name_in_owner = true
+title = "Open a File"
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.anim")
+use_native_dialog = true
+
+[node name="SaveDialog" type="FileDialog" parent="."]
+unique_name_in_owner = true
+access = 2
+filters = PackedStringArray("*.anim")
+use_native_dialog = true
+
+[connection signal="finished" from="TrackerPlayer" to="." method="_on_tracker_player_finished"]
+[connection signal="toggled" from="PanelContainer/MarginContainer/HBoxContainer/GridContainer/RecordButton" to="." method="_on_record_button_toggled"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/HBoxContainer/GridContainer/MixButton" to="." method="_on_mix_button_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/HBoxContainer/GridContainer/LoadButton" to="." method="_on_load_button_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/HBoxContainer/GridContainer/PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/HBoxContainer/GridContainer/SaveButton" to="." method="_on_save_button_pressed"]
+[connection signal="file_selected" from="LoadDialog" to="." method="_on_load_dialog_file_selected"]
+[connection signal="confirmed" from="SaveDialog" to="." method="_on_save_dialog_confirmed"]
+[connection signal="file_selected" from="SaveDialog" to="." method="_on_save_dialog_file_selected"]
+
+[editable path="Tracking/Avatar/Test-Chan"]
+[editable path="Mixing/Avatar/male"]
+[editable path="Playing/Avatar/female"]

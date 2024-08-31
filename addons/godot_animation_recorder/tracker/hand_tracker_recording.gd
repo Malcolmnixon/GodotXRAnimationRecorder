@@ -10,6 +10,9 @@ extends Resource
 ## Array of joint names by index
 @export var joints : PackedStringArray
 
+## Recording length
+@export var length : float
+
 ## Array of recorded timestamps
 @export var times : Array[float] = []
 
@@ -40,6 +43,7 @@ func clear() -> void:
 func record(p_time : float, p_tracker : XRHandTracker) -> void:
 	# Append the time
 	times.append(p_time)
+	length = p_time
 
 	# Construct the packed arrays
 	var packed_joint_flags := PackedInt32Array()

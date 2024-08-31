@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://2isowy6soqqc"]
+
+[ext_resource type="Script" path="res://addons/godot_animation_recorder/animation/animation_recorder.gd" id="1_aqhlg"]
+
+[node name="AnimationRecorder" type="Node"]
+script = ExtResource("1_aqhlg")

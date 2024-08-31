@@ -2,9 +2,13 @@ class_name GodotXRTrackerPlayer
 extends Node
 
 
-## Tracker Recorder
+## Tracker Player
 ##
 ## This node is capable of playing recording trackers.
+
+
+## Signal emitted when playback finishes
+signal finished
 
 
 ## Body Tracker Name
@@ -50,6 +54,9 @@ var _left_hand_tracker : XRHandTracker
 # Right hand tracker instance
 var _right_hand_tracker : XRHandTracker
 
+# Count of tracks
+var _count : int
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -67,6 +74,16 @@ func _process(delta: float) -> void:
 	if _left_hand_tracker: left_hand_recording.play(time, _left_hand_tracker)
 	if _right_hand_tracker: right_hand_recording.play(time, _right_hand_tracker)
 
+	# Check for ended
+	var ended := 0
+	if _body_tracker and time > body_recording.length: ended += 1
+	if _face_tracker and time > face_recording.length: ended += 1
+	if _left_hand_tracker and time > left_hand_recording.length: ended += 1
+	if _right_hand_tracker and time > right_hand_recording.length: ended += 1
+	if ended == _count:
+		stop()
+		finished.emit()
+
 
 func play() -> void:
 	# Ensure any existing playback is stopped
@@ -77,24 +94,28 @@ func play() -> void:
 		_body_tracker = XRBodyTracker.new()
 		_body_tracker.name = body_tracker_name
 		XRServer.add_tracker(_body_tracker)
+		_count += 1
 
 	# Add the face tracker if specified
 	if face_tracker_name != &"" and face_recording:
 		_face_tracker = XRFaceTracker.new()
 		_face_tracker.name = face_tracker_name
 		XRServer.add_tracker(_face_tracker)
+		_count += 1
 
 	# Add the left hand tracker if specified
 	if left_hand_tracker_name != &"" and left_hand_recording:
 		_left_hand_tracker = XRHandTracker.new()
 		_left_hand_tracker.name = left_hand_tracker_name
 		XRServer.add_tracker(_left_hand_tracker)
+		_count += 1
 
 	# Add the right hand tracker if specified
 	if right_hand_tracker_name != &"" and right_hand_recording:
 		_right_hand_tracker = XRHandTracker.new()
 		_right_hand_tracker.name = right_hand_tracker_name
 		XRServer.add_tracker(_right_hand_tracker)
+		_count += 1
 
 	# Start playing
 	_start = _now()
@@ -118,6 +139,7 @@ func stop() -> void:
 	_face_tracker = null
 	_left_hand_tracker = null
 	_right_hand_tracker = null
+	_count = 0
 
 
 # Get a monotonic time in float seconds

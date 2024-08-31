@@ -10,6 +10,9 @@ extends Resource
 ## Array of blend shapes names by index
 @export var blends : PackedStringArray
 
+## Recording length
+@export var length : float
+
 ## Array of recorded timestamps
 @export var times : Array[float] = []
 
@@ -32,6 +35,7 @@ func clear() -> void:
 func record(p_time : float, p_tracker : XRFaceTracker) -> void:
 	# Append the time
 	times.append(p_time)
+	length = p_time
 
 	# Append the blend shapes
 	blend_shapes.append(p_tracker.blend_shapes)
