@@ -78,8 +78,8 @@ unique_name_in_owner = true
 
 [node name="AnimationRecorder" parent="." node_paths=PackedStringArray("skeleton", "face") instance=ExtResource("5_cqdnw")]
 unique_name_in_owner = true
-skeleton = NodePath("../Mixing/Avatar/male/Armature/Skeleton3D")
-face = NodePath("../Mixing/Avatar/male/Armature/Skeleton3D/Wolf3D_Avatar")
+skeleton = NodePath("../Mixing/Avatar/male/Armature/GeneralSkeleton")
+face = NodePath("../Mixing/Avatar/male/Armature/GeneralSkeleton/Wolf3D_Avatar")
 
 [node name="Tracking" type="Node3D" parent="."]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -1.2, 0, 0)
@@ -90,20 +90,20 @@ tracker = &"/vmc/body_tracker"
 
 [node name="Test-Chan" parent="Tracking/Avatar" instance=ExtResource("3_rdwmc")]
 
-[node name="XRBodyModifier3D" type="XRBodyModifier3D" parent="Tracking/Avatar/Test-Chan/Armature/Skeleton3D" index="2"]
-transform = Transform3D(0.997246, 0, -0.0741677, 0, 1, 0, 0.0741677, 0, 0.997246, 0.000939012, 0, 0.0443274)
+[node name="XRBodyModifier3D" type="XRBodyModifier3D" parent="Tracking/Avatar/Test-Chan/Armature/GeneralSkeleton" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 body_tracker = &"/vmc/body_tracker"
 bone_update = 1
 
-[node name="Label3D" type="Label3D" parent="Tracking/Avatar/Test-Chan/Armature/Skeleton3D" index="3"]
-transform = Transform3D(0.997246, 0, -0.0741677, 0, 1, 0, 0.0741677, 0, 0.997246, 0, 2, 0)
+[node name="Label3D" type="Label3D" parent="Tracking/Avatar/Test-Chan/Armature/GeneralSkeleton" index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 billboard = 2
 text = "Live
 Tracking"
 
 [node name="XRFaceModifier3D" type="XRFaceModifier3D" parent="Tracking/Avatar"]
 face_tracker = &"/vmc/face_tracker"
-target = NodePath("../Test-Chan/Armature/Skeleton3D/Body")
+target = NodePath("../Test-Chan/Armature/GeneralSkeleton/Body")
 
 [node name="GroundRing" type="MeshInstance3D" parent="Tracking/Avatar"]
 mesh = SubResource("TorusMesh_hgul2")
@@ -122,19 +122,18 @@ tracker = &"/recording/body_tracker"
 
 [node name="male" parent="Mixing/Avatar" instance=ExtResource("7_2ksda")]
 
-[node name="XRBodyModifier3D" type="XRBodyModifier3D" parent="Mixing/Avatar/male/Armature/Skeleton3D" index="1"]
-transform = Transform3D(-0.999311, 0, 0.0371094, 0, 1, 0, -0.0371094, 0, -0.999311, 0.00554865, 0, 0.0919801)
+[node name="XRBodyModifier3D" type="XRBodyModifier3D" parent="Mixing/Avatar/male/Armature/GeneralSkeleton" index="1"]
 body_tracker = &"/recording/body_tracker"
 bone_update = 1
 
-[node name="Label3D" type="Label3D" parent="Mixing/Avatar/male/Armature/Skeleton3D" index="2"]
-transform = Transform3D(-0.999311, 0, 0.0371094, 0, 1, 0, -0.0371094, 0, -0.999311, 0.00554865, 2, 0.0919801)
+[node name="Label3D" type="Label3D" parent="Mixing/Avatar/male/Armature/GeneralSkeleton" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 billboard = 2
 text = "Mixing"
 
 [node name="XRFaceModifier3D" type="XRFaceModifier3D" parent="Mixing/Avatar"]
 face_tracker = &"/recording/face_tracker"
-target = NodePath("../male/Armature/Skeleton3D/Wolf3D_Avatar")
+target = NodePath("../male/Armature/GeneralSkeleton/Wolf3D_Avatar")
 
 [node name="GroundRing" type="MeshInstance3D" parent="Mixing/Avatar"]
 mesh = SubResource("TorusMesh_hgul2")
@@ -149,7 +148,7 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1.2, 0
 [node name="female" parent="Playing" instance=ExtResource("8_embxr")]
 transform = Transform3D(0.999311, 0, 0.0371093, 0, 1, 0, -0.0371093, 0, 0.999311, -0.0089581, 0, -0.0917108)
 
-[node name="Label3D" type="Label3D" parent="Playing/female/Armature/Skeleton3D" index="1"]
+[node name="Label3D" type="Label3D" parent="Playing/female/Armature/GeneralSkeleton" index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 billboard = 2
 text = "Playing"
