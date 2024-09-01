@@ -7,6 +7,8 @@
 
 Godot XR addon to facilitate recording of XR tracker data and creating an animation file.
 
+[<img src="docs/preview.png">](https://youtu.be/-5fZApyi5jc "Godot XR Animation Recorder")
+
 
 ## Versions
 
