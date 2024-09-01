@@ -86,7 +86,7 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -1.2, 
 
 [node name="Avatar" type="XRNode3D" parent="Tracking"]
 transform = Transform3D(0.999311, 0, 0.0371093, 0, 1, 0, -0.0371093, 0, 0.999311, -0.00895814, 0, -0.0917108)
-tracker = &"/rokoko/body_tracker"
+tracker = &"/vmc/body_tracker"
 
 [node name="Test-Chan" parent="Tracking/Avatar" instance=ExtResource("3_rdwmc")]
 
@@ -118,7 +118,7 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 
 
 [node name="Avatar" type="XRNode3D" parent="Mixing"]
 transform = Transform3D(0.999311, 0, 0.0371093, 0, 1, 0, -0.0371093, 0, 0.999311, -0.00895814, 0, -0.0917108)
-tracker = &"/rokoko/body_tracker"
+tracker = &"/recording/body_tracker"
 
 [node name="male" parent="Mixing/Avatar" instance=ExtResource("7_2ksda")]
 
@@ -146,26 +146,23 @@ mesh = SubResource("SphereMesh_ouj5y")
 [node name="Playing" type="Node3D" parent="."]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1.2, 0, 0)
 
-[node name="Avatar" type="XRNode3D" parent="Playing"]
-transform = Transform3D(0.999311, 0, 0.0371093, 0, 1, 0, -0.0371093, 0, 0.999311, -0.00895814, 0, -0.0917108)
-tracker = &"/rokoko/body_tracker"
+[node name="female" parent="Playing" instance=ExtResource("8_embxr")]
+transform = Transform3D(0.999311, 0, 0.0371093, 0, 1, 0, -0.0371093, 0, 0.999311, -0.0089581, 0, -0.0917108)
 
-[node name="female" parent="Playing/Avatar" instance=ExtResource("8_embxr")]
-
-[node name="Label3D" type="Label3D" parent="Playing/Avatar/female/Armature/Skeleton3D" index="1"]
+[node name="Label3D" type="Label3D" parent="Playing/female/Armature/Skeleton3D" index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 billboard = 2
 text = "Playing"
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Playing/Avatar/female"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Playing/female"]
 unique_name_in_owner = true
 root_node = NodePath("../Armature")
 
-[node name="GroundRing" type="MeshInstance3D" parent="Playing/Avatar"]
+[node name="GroundRing" type="MeshInstance3D" parent="Playing/female"]
 mesh = SubResource("TorusMesh_hgul2")
 skeleton = NodePath("")
 
-[node name="Forward" type="MeshInstance3D" parent="Playing/Avatar/GroundRing"]
+[node name="Forward" type="MeshInstance3D" parent="Playing/female/GroundRing"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, -0.6)
 mesh = SubResource("SphereMesh_ouj5y")
 
@@ -285,4 +282,4 @@ use_native_dialog = true
 
 [editable path="Tracking/Avatar/Test-Chan"]
 [editable path="Mixing/Avatar/male"]
-[editable path="Playing/Avatar/female"]
+[editable path="Playing/female"]
