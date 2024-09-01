@@ -1,6 +1,12 @@
 extends Node3D
 
 
+
+var animation : Animation
+
+var audio : AudioStream
+
+
 # Process movement based on keyboard
 func _process(delta : float) -> void:
 	var xform : Transform3D = %Camera3D.global_transform
@@ -49,14 +55,75 @@ func _input(event : InputEvent) -> void:
 func _on_record_button_toggled(toggled_on: bool) -> void:
 	if toggled_on:
 		%TrackerRecorder.start_recording()
+		%AudioRecorder.start_recording()
+		%MixButton.disabled = true
 	else:
 		%TrackerRecorder.stop_recording()
+		%AudioRecorder.stop_recording()
+		%MixButton.disabled = false
+		audio = %AudioRecorder.audio
 
 
-func _on_play_button_pressed() -> void:
+func _on_mix_button_pressed() -> void:
+	# Disable animation buttons when mixing
+	%LoadButton.disabled = true
+	%PlayButton.disabled = true
+	%SaveButton.disabled = true
+
+	# Mix the tracks
 	%TrackerPlayer.stop()
 	%TrackerPlayer.body_recording = %TrackerRecorder.body_recording
 	%TrackerPlayer.face_recording = %TrackerRecorder.face_recording
 	%TrackerPlayer.left_hand_recording = %TrackerRecorder.left_hand_recording
 	%TrackerPlayer.right_hand_recording = %TrackerRecorder.right_hand_recording
 	%TrackerPlayer.play()
+	%AnimationRecorder.start_recording()
+
+
+func _on_tracker_player_finished() -> void:
+	# Stop and save the animation
+	%AnimationRecorder.stop_recording()
+	animation = %AnimationRecorder.animation
+
+	# Restore animation control buttons
+	%LoadButton.disabled = false
+	%PlayButton.disabled = false
+	%SaveButton.disabled = false
+
+
+func _on_load_button_pressed() -> void:
+	%LoadDialog.show()
+
+
+func _on_load_dialog_file_selected(path: String) -> void:
+	animation = ResourceLoader.load(path) as Animation
+
+
+func _on_play_button_pressed() -> void:
+	# Stop any current animation
+	%AnimationPlayer.stop()
+	%AudioPlayer.stop()
+
+	# Get the animation library
+	var lib : AnimationLibrary = %AnimationPlayer.get_animation_library("")
+	if not lib:
+		lib = AnimationLibrary.new()
+		%AnimationPlayer.add_animation_library("", lib)
+
+	# Swap the animation
+	if lib.has_animation("animation"):
+		lib.remove_animation("animation")
+	lib.add_animation("animation", animation)
+
+	# Play the animation
+	%AnimationPlayer.play("animation")
+	%AudioPlayer.stream = audio
+	%AudioPlayer.play()
+
+
+func _on_save_button_pressed() -> void:
+	%SaveDialog.show()
+
+
+func _on_save_dialog_file_selected(path: String) -> void:
+	ResourceSaver.save(animation, path)

@@ -10,8 +10,17 @@ extends Resource
 ## Array of joint names by index
 @export var joints : PackedStringArray
 
+## Recording length
+@export var length : float
+
 ## Array of recorded timestamps
 @export var times : Array[float] = []
+
+## Array of tracker positions
+@export var positions : Array[Vector3] = []
+
+## Array of tracker rotations
+@export var rotations : Array[Quaternion] = []
 
 ## Array of recorded joint flags
 @export var joint_flags : Array[PackedInt32Array] = []
@@ -31,6 +40,8 @@ func _init() -> void:
 ## Clear the recording
 func clear() -> void:
 	times.clear()
+	positions.clear()
+	rotations.clear()
 	joint_flags.clear()
 	joint_origins.clear()
 	joint_rotations.clear()
@@ -40,6 +51,12 @@ func clear() -> void:
 func record(p_time : float, p_tracker : XRHandTracker) -> void:
 	# Append the time
 	times.append(p_time)
+	length = p_time
+
+	# Save the hand pose (skeleton)
+	var bx := p_tracker.get_pose("skeleton").transform
+	positions.append(bx.origin)
+	rotations.append(bx.basis.get_rotation_quaternion())
 
 	# Construct the packed arrays
 	var packed_joint_flags := PackedInt32Array()
@@ -81,6 +98,17 @@ func find(p_time : float) -> int:
 
 ## Read tracking data from the recording
 func read(p_index : int, p_tracker : XRHandTracker) -> void:
+	# Set the hand pose (skeleton)
+	var bo := positions[p_index]
+	var bq := rotations[p_index]
+	var bx := Transform3D(Basis(bq), bo)
+	p_tracker.set_pose(
+		"skeleton",
+		bx,
+		Vector3.ZERO,
+		Vector3.ZERO,
+		XRPose.XR_TRACKING_CONFIDENCE_HIGH)
+
 	# Get the packed arrays
 	var packed_joint_flags := joint_flags[p_index]
 	var packed_joint_origins := joint_origins[p_index]

@@ -10,8 +10,17 @@ extends Resource
 ## Array of joint names by index
 @export var joints : PackedStringArray
 
+## Recording length
+@export var length : float
+
 ## Array of recorded timestamps
 @export var times : Array[float] = []
+
+## Array of tracker positions
+@export var positions : Array[Vector3] = []
+
+## Array of tracker rotations
+@export var rotations : Array[Quaternion] = []
 
 ## Array of recorded body_flags
 @export var body_flags : Array[int] = []
@@ -34,6 +43,8 @@ func _init() -> void:
 ## Clear the recording
 func clear() -> void:
 	times.clear()
+	positions.clear()
+	rotations.clear()
 	body_flags.clear()
 	joint_flags.clear()
 	joint_origins.clear()
@@ -44,6 +55,12 @@ func clear() -> void:
 func record(p_time : float, p_tracker : XRBodyTracker) -> void:
 	# Append the time
 	times.append(p_time)
+	length = p_time
+
+	# Save the body pose
+	var bx := p_tracker.get_pose("default").transform
+	positions.append(bx.origin)
+	rotations.append(bx.basis.get_rotation_quaternion())
 
 	# Append the body flags
 	body_flags.append(p_tracker.body_flags)
@@ -62,11 +79,10 @@ func record(p_time : float, p_tracker : XRBodyTracker) -> void:
 		packed_joint_flags[j] = p_tracker.get_joint_flags(j)
 
 		# Save the joint transform
-		var xform := p_tracker.get_joint_transform(j)
-		var o := xform.origin
-		var q := xform.basis.get_rotation_quaternion()
-		packed_joint_origins[j] = o
-		packed_joint_rotations[j] = Vector4(q.x, q.y, q.z, q.w)
+		var jx := p_tracker.get_joint_transform(j)
+		var jq := jx.basis.get_rotation_quaternion()
+		packed_joint_origins[j] = jx.origin
+		packed_joint_rotations[j] = Vector4(jq.x, jq.y, jq.z, jq.w)
 
 	# Append the packed arrays
 	joint_flags.append(packed_joint_flags)
@@ -91,6 +107,17 @@ func read(p_index : int, p_tracker : XRBodyTracker) -> void:
 	# Populate the body flags
 	p_tracker.body_flags = body_flags[p_index]
 
+	# Set the body pose
+	var bo := positions[p_index]
+	var bq := rotations[p_index]
+	var bx := Transform3D(Basis(bq), bo)
+	p_tracker.set_pose(
+		"default",
+		bx,
+		Vector3.ZERO,
+		Vector3.ZERO,
+		XRPose.XR_TRACKING_CONFIDENCE_HIGH)
+
 	# Get the packed arrays
 	var packed_joint_flags := joint_flags[p_index]
 	var packed_joint_origins := joint_origins[p_index]
@@ -102,10 +129,10 @@ func read(p_index : int, p_tracker : XRBodyTracker) -> void:
 		p_tracker.set_joint_flags(j, packed_joint_flags[j])
 
 		# Populate the joint transform
-		var o := packed_joint_origins[j]
-		var q := packed_joint_rotations[j]
-		var xform := Transform3D(Basis(Quaternion(q.x, q.y, q.z, q.w)), o)
-		p_tracker.set_joint_transform(j, xform)
+		var jo := packed_joint_origins[j]
+		var jq := packed_joint_rotations[j]
+		var jx := Transform3D(Basis(Quaternion(jq.x, jq.y, jq.z, jq.w)), jo)
+		p_tracker.set_joint_transform(j, jx)
 
 	# Report tracking data available
 	p_tracker.has_tracking_data = true
