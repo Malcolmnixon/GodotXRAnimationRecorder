@@ -232,7 +232,7 @@ func _on_skeleton_updated() -> void:
 func _populate_skeleton_tracks() -> void:
 	# Get the animation node path
 	var node_path := skeleton.get_parent().get_path_to(skeleton)
-	
+
 	# Iterate over all bones
 	for b in skeleton.get_bone_count():
 		# Get the bone name and path

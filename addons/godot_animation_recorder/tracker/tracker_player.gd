@@ -59,7 +59,7 @@ var _count : int
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	# Disable if not playing
 	if not _playing:
 		set_physics_process(false)
