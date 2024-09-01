@@ -4,6 +4,8 @@ extends Node3D
 
 var animation : Animation
 
+var audio : AudioStream
+
 
 # Process movement based on keyboard
 func _process(delta : float) -> void:
@@ -53,10 +55,13 @@ func _input(event : InputEvent) -> void:
 func _on_record_button_toggled(toggled_on: bool) -> void:
 	if toggled_on:
 		%TrackerRecorder.start_recording()
+		%AudioRecorder.start_recording()
 		%MixButton.disabled = true
 	else:
 		%TrackerRecorder.stop_recording()
+		%AudioRecorder.stop_recording()
 		%MixButton.disabled = false
+		audio = %AudioRecorder.audio
 
 
 func _on_mix_button_pressed() -> void:
@@ -97,6 +102,7 @@ func _on_load_dialog_file_selected(path: String) -> void:
 func _on_play_button_pressed() -> void:
 	# Stop any current animation
 	%AnimationPlayer.stop()
+	%AudioPlayer.stop()
 
 	# Get the animation library
 	var lib : AnimationLibrary = %AnimationPlayer.get_animation_library("")
@@ -111,6 +117,8 @@ func _on_play_button_pressed() -> void:
 
 	# Play the animation
 	%AnimationPlayer.play("animation")
+	%AudioPlayer.stream = audio
+	%AudioPlayer.play()
 
 
 func _on_save_button_pressed() -> void:

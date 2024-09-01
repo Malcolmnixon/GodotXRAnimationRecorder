@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://c02r4tj8rqvmo"]
+[gd_scene load_steps=20 format=3 uid="uid://c02r4tj8rqvmo"]
 
 [ext_resource type="Texture2D" uid="uid://drjoya1j38i21" path="res://assets/ambientcg.com/Carpet003_1K-JPG_Color.jpg" id="1_e6qef"]
 [ext_resource type="Script" path="res://demo.gd" id="1_pjmhy"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bhc6nngwjdvum" path="res://assets/test_chan/Test-Chan.fbx" id="3_rdwmc"]
 [ext_resource type="PackedScene" uid="uid://b36qa4p6kl7k1" path="res://addons/godot_animation_recorder/tracker/tracker_player.tscn" id="4_1qj27"]
 [ext_resource type="PackedScene" uid="uid://2isowy6soqqc" path="res://addons/godot_animation_recorder/animation/animation_recorder.tscn" id="5_cqdnw"]
+[ext_resource type="PackedScene" uid="uid://dpweghjh6ahl1" path="res://addons/godot_animation_recorder/audio/audio_recorder.tscn" id="6_aw15n"]
 [ext_resource type="PackedScene" uid="uid://b8o5ttblgrkx1" path="res://assets/ready_player_me/male.glb" id="7_2ksda"]
 [ext_resource type="PackedScene" uid="uid://ee6y0cor2nrp" path="res://assets/ready_player_me/female.glb" id="8_embxr"]
 
@@ -29,6 +30,8 @@ uv1_scale = Vector3(3, 3, 3)
 [sub_resource type="QuadMesh" id="QuadMesh_1vgh2"]
 material = SubResource("StandardMaterial3D_55n8g")
 size = Vector2(8, 8)
+
+[sub_resource type="AudioStreamMicrophone" id="AudioStreamMicrophone_rsk1h"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_stsmb"]
 albedo_color = Color(1, 1, 0, 1)
@@ -76,10 +79,19 @@ right_hand_tracker_name = &""
 [node name="TrackerPlayer" parent="." instance=ExtResource("4_1qj27")]
 unique_name_in_owner = true
 
-[node name="AnimationRecorder" parent="." node_paths=PackedStringArray("skeleton", "face") instance=ExtResource("5_cqdnw")]
+[node name="AnimationRecorder" parent="." node_paths=PackedStringArray("skeleton", "face", "root_motion") instance=ExtResource("5_cqdnw")]
 unique_name_in_owner = true
 skeleton = NodePath("../Mixing/Avatar/male/Armature/GeneralSkeleton")
 face = NodePath("../Mixing/Avatar/male/Armature/GeneralSkeleton/Wolf3D_Avatar")
+root_motion = NodePath("../Mixing/Avatar")
+
+[node name="AudioRecorder" parent="." instance=ExtResource("6_aw15n")]
+unique_name_in_owner = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="AudioRecorder"]
+stream = SubResource("AudioStreamMicrophone_rsk1h")
+autoplay = true
+bus = &"Input"
 
 [node name="Tracking" type="Node3D" parent="."]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -1.2, 0, 0)
@@ -125,7 +137,15 @@ tracker = &"/recording/body_tracker"
 body_tracker = &"/recording/body_tracker"
 bone_update = 1
 
-[node name="Label3D" type="Label3D" parent="Mixing/Avatar/male/Armature/GeneralSkeleton" index="2"]
+[node name="XRHandModifier3DLeft" type="XRHandModifier3D" parent="Mixing/Avatar/male/Armature/GeneralSkeleton" index="2"]
+hand_tracker = &"/recording/hand_tracker/left"
+bone_update = 1
+
+[node name="XRHandModifier3DRight" type="XRHandModifier3D" parent="Mixing/Avatar/male/Armature/GeneralSkeleton" index="3"]
+hand_tracker = &"/recording/hand_tracker/right"
+bone_update = 1
+
+[node name="Label3D" type="Label3D" parent="Mixing/Avatar/male/Armature/GeneralSkeleton" index="4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 billboard = 2
 text = "Mixing"
@@ -163,6 +183,9 @@ skeleton = NodePath("")
 [node name="Forward" type="MeshInstance3D" parent="Playing/female/GroundRing"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, -0.6)
 mesh = SubResource("SphereMesh_ouj5y")
+
+[node name="AudioPlayer" type="AudioStreamPlayer" parent="Playing/female"]
+unique_name_in_owner = true
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 anchors_preset = 3

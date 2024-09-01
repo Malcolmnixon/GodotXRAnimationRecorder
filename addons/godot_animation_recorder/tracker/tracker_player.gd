@@ -107,6 +107,7 @@ func play() -> void:
 	if left_hand_tracker_name != &"" and left_hand_recording:
 		_left_hand_tracker = XRHandTracker.new()
 		_left_hand_tracker.name = left_hand_tracker_name
+		_left_hand_tracker.hand = XRPositionalTracker.TRACKER_HAND_LEFT
 		XRServer.add_tracker(_left_hand_tracker)
 		_count += 1
 
@@ -114,6 +115,7 @@ func play() -> void:
 	if right_hand_tracker_name != &"" and right_hand_recording:
 		_right_hand_tracker = XRHandTracker.new()
 		_right_hand_tracker.name = right_hand_tracker_name
+		_right_hand_tracker.hand = XRPositionalTracker.TRACKER_HAND_RIGHT
 		XRServer.add_tracker(_right_hand_tracker)
 		_count += 1
 

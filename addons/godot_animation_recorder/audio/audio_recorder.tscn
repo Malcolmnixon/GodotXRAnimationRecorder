@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dpweghjh6ahl1"]
+
+[ext_resource type="Script" path="res://addons/godot_animation_recorder/audio/audio_recorder.gd" id="1_qa5vy"]
+
+[node name="AudioRecorder" type="Node"]
+script = ExtResource("1_qa5vy")

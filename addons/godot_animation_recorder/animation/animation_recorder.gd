@@ -123,6 +123,9 @@ const _FACE_52_BLENDSHAPES : Array[String] = [
 ## Face node
 @export var face : MeshInstance3D
 
+## Optional root-motion node
+@export var root_motion : Node3D
+
 ## Only record 52 blend-shapes
 @export var only_52_blendshapes : bool = true
 
@@ -213,6 +216,9 @@ func _on_skeleton_updated() -> void:
 	for track in _bone_position_tracks:
 		var bone : int = _bone_position_tracks[track]
 		var pos := skeleton.get_bone_pose_position(bone)
+		# Apply optional root motion
+		if root_motion and skeleton.get_bone_parent(bone) == -1:
+			pos = root_motion.transform * pos
 		animation.track_insert_key(track, time, pos)
 
 	# Record bone rotations
