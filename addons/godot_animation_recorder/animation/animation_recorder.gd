@@ -230,14 +230,11 @@ func _on_skeleton_updated() -> void:
 
 # Populate the skeleton tracks
 func _populate_skeleton_tracks() -> void:
-	# Get the animation node path
-	var node_path := skeleton.get_parent().get_path_to(skeleton)
-
 	# Iterate over all bones
 	for b in skeleton.get_bone_count():
 		# Get the bone name and path
 		var bone_name := skeleton.get_bone_name(b)
-		var path := NodePath(String(node_path) + ":" + bone_name)
+		var path := NodePath("%GeneralSkeleton:" + bone_name)
 
 		# Skip if only humanoid bones and this isn't a humanoid bone
 		if only_godot_humanoid_bones and not _BONES_GODOT_HUMANOID.has(bone_name):

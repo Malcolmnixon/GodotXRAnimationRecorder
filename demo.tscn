@@ -91,7 +91,6 @@ tracker = &"/vmc/body_tracker"
 [node name="Test-Chan" parent="Tracking/Avatar" instance=ExtResource("3_rdwmc")]
 
 [node name="XRBodyModifier3D" type="XRBodyModifier3D" parent="Tracking/Avatar/Test-Chan/Armature/GeneralSkeleton" index="2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 body_tracker = &"/vmc/body_tracker"
 bone_update = 1
 
