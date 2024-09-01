@@ -2,6 +2,12 @@ class_name GodotXRAnimationRecorder
 extends Node
 
 
+## Animation Recorder
+##
+## This node is capable of generating a Godot Animation by monitoring
+## an avatar and inspecting the bones and facial blend-shapes.
+
+
 # Names of Godot Humanoid Bones
 const _BONES_GODOT_HUMANOID : Array[String] = [
 	"Root",

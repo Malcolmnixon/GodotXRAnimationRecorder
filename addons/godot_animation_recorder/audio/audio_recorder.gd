@@ -1,4 +1,11 @@
+class_name GodotXRAudioRecorder
 extends Node
+
+
+## Audio Recorder
+##
+## This node is capable of recording audio from an audio bus driven by
+## a Microphone audio-stream player.
 
 
 ## Input audio bus name

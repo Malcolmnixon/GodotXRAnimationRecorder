@@ -23,17 +23,18 @@ signal finished
 ## Right Hand Tracker Name
 @export var right_hand_tracker_name : StringName = &"/recording/hand_tracker/right"
 
+
 ## Body Recording
-@export var body_recording : GodotXRBodyTrackerRecording
+var body_recording : GodotXRBodyTrackerRecording
 
 ## Face Recording
-@export var face_recording : GodotXRFaceTrackerRecording
+var face_recording : GodotXRFaceTrackerRecording
 
 ## Left Hand Recording
-@export var left_hand_recording : GodotXRHandTrackerRecording
+var left_hand_recording : GodotXRHandTrackerRecording
 
 ## Right Hand Recording
-@export var right_hand_recording : GodotXRHandTrackerRecording
+var right_hand_recording : GodotXRHandTrackerRecording
 
 
 # Playing flag
