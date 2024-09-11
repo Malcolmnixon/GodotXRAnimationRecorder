@@ -89,6 +89,13 @@ func start_recording() -> void:
 	if _left_hand_tracker: left_hand_recording = GodotXRHandTrackerRecording.new()
 	if _right_hand_tracker: right_hand_recording = GodotXRHandTrackerRecording.new()
 
+	# Print verbose diagnostics
+	print_verbose("GodotXRTrackerRecorder: Stopping recording...")
+	if _body_tracker: print_verbose("  Recording body ", body_tracker_name)
+	if _face_tracker: print_verbose("  Recording face ", face_tracker_name)
+	if _left_hand_tracker: print_verbose("  Recording left hand ", left_hand_tracker_name)
+	if _right_hand_tracker: print_verbose("  Recording right hand ", right_hand_tracker_name)
+
 	# Start recording
 	_start = _now()
 	_recording = true
@@ -97,6 +104,12 @@ func start_recording() -> void:
 
 ## Stop recording
 func stop_recording() -> void:
+	# Skip if not recording
+	if not _recording:
+		return
+
+	# Stop recording
+	print_verbose("GodotXRTrackerRecorder: Stopping recording")
 	_recording = false
 
 

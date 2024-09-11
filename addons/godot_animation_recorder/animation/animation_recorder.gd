@@ -179,11 +179,20 @@ func start_recording() -> bool:
 	_bone_rotation_tracks = {}
 	_face_tracks = {}
 
+	# Set the animation rate
+	match skeleton.modifier_callback_mode_process:
+		Skeleton3D.ModifierCallbackModeProcess.MODIFIER_CALLBACK_MODE_PROCESS_PHYSICS:
+			animation.step = 1 / Engine.physics_ticks_per_second
+
+		Skeleton3D.ModifierCallbackModeProcess.MODIFIER_CALLBACK_MODE_PROCESS_IDLE:
+			animation.step = 1 / Engine.get_frames_per_second()
+
 	# Populate the tracks
 	_populate_skeleton_tracks()
 	_populate_face_tracks()
 
 	# Start the recording
+	print_verbose("GodotXRAnimationRecorder: Starting recording")
 	skeleton.skeleton_updated.connect(_on_skeleton_updated)
 	_start = _now()
 	_recording = true
@@ -192,17 +201,19 @@ func start_recording() -> bool:
 
 ## Stop recording
 func stop_recording() -> bool:
-	# Fail if not recording
+	# Skip if not recording
 	if not _recording:
 		return false
 
 	# Stop the recording
+	print_verbose("GodotXRAnimationRecorder: Stopping recording")
 	_recording = false
 	skeleton.skeleton_updated.disconnect(_on_skeleton_updated)
 
 	# Optimize if requested
 	if optimize:
 		if animation.has_method("optimize"):
+			print_verbose("GodotXRAnimationRecorder: Optimizing animation")
 			animation.optimize(0.01, 0.01, 3)
 		else:
 			push_warning("Animation.optimize not supported")

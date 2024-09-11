@@ -120,6 +120,13 @@ func play() -> void:
 		XRServer.add_tracker(_right_hand_tracker)
 		_count += 1
 
+	# Print verbose diagnostics
+	print_verbose("GodotXRTrackerPlayer: Starting playback")
+	if _body_tracker: print_verbose("  Playing body ", body_tracker_name)
+	if _face_tracker: print_verbose("  Playing face ", face_tracker_name)
+	if _left_hand_tracker: print_verbose("  Playing left hand ", left_hand_tracker_name)
+	if _right_hand_tracker: print_verbose("  Playing right hand ", right_hand_tracker_name)
+
 	# Start playing
 	_start = _now()
 	_playing = true
@@ -128,7 +135,12 @@ func play() -> void:
 
 ## Stop playback
 func stop() -> void:
+	# Skip if not playing
+	if not _playing:
+		return
+
 	# Clear playing
+	print_verbose("GodotXRTrackerPlayer: Stopping playback")
 	_playing = false
 
 	# Remove any trackers
