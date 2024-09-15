@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://c02r4tj8rqvmo"]
+[gd_scene load_steps=22 format=3 uid="uid://c02r4tj8rqvmo"]
 
 [ext_resource type="Texture2D" uid="uid://drjoya1j38i21" path="res://assets/ambientcg.com/Carpet003_1K-JPG_Color.jpg" id="1_e6qef"]
 [ext_resource type="Script" path="res://demo.gd" id="1_pjmhy"]
@@ -8,7 +8,9 @@
 [ext_resource type="PackedScene" uid="uid://2isowy6soqqc" path="res://addons/godot_animation_recorder/animation/animation_recorder.tscn" id="5_cqdnw"]
 [ext_resource type="PackedScene" uid="uid://dpweghjh6ahl1" path="res://addons/godot_animation_recorder/audio/audio_recorder.tscn" id="6_aw15n"]
 [ext_resource type="PackedScene" uid="uid://b8o5ttblgrkx1" path="res://assets/ready_player_me/male.glb" id="7_2ksda"]
+[ext_resource type="PackedScene" uid="uid://c5jtkbiq4nkci" path="res://addons/godot_animation_recorder/tracker/tracker_streamer.tscn" id="7_h746a"]
 [ext_resource type="PackedScene" uid="uid://ee6y0cor2nrp" path="res://assets/ready_player_me/female.glb" id="8_embxr"]
+[ext_resource type="PackedScene" uid="uid://cay8oh2ll7yxi" path="res://assets/test_kun/Test-Kun.fbx" id="10_c8qoa"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_o2dlm"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -93,8 +95,13 @@ stream = SubResource("AudioStreamMicrophone_rsk1h")
 autoplay = true
 bus = &"Input"
 
+[node name="TrackerStreamer" parent="." node_paths=PackedStringArray("skeleton", "face", "origin") instance=ExtResource("7_h746a")]
+skeleton = NodePath("../Playing/female/Armature/GeneralSkeleton")
+face = NodePath("../Playing/female/Armature/GeneralSkeleton/Wolf3D_Avatar")
+origin = NodePath("../Playing")
+
 [node name="Tracking" type="Node3D" parent="."]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -1.2, 0, 0)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -1.8, 0, 0)
 
 [node name="Avatar" type="XRNode3D" parent="Tracking"]
 transform = Transform3D(0.999311, 0, 0.0371093, 0, 1, 0, -0.0371093, 0, 0.999311, -0.00895814, 0, -0.0917108)
@@ -125,7 +132,7 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 
 mesh = SubResource("SphereMesh_ouj5y")
 
 [node name="Mixing" type="Node3D" parent="."]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.6, 0, 0)
 
 [node name="Avatar" type="XRNode3D" parent="Mixing"]
 transform = Transform3D(0.999311, 0, 0.0371093, 0, 1, 0, -0.0371093, 0, 0.999311, -0.00895814, 0, -0.0917108)
@@ -162,7 +169,7 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 
 mesh = SubResource("SphereMesh_ouj5y")
 
 [node name="Playing" type="Node3D" parent="."]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1.2, 0, 0)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.6, 0, 0)
 
 [node name="female" parent="Playing" instance=ExtResource("8_embxr")]
 transform = Transform3D(0.999311, 0, 0.0371093, 0, 1, 0, -0.0371093, 0, 0.999311, -0.0089581, 0, -0.0917108)
@@ -186,6 +193,36 @@ mesh = SubResource("SphereMesh_ouj5y")
 
 [node name="AudioPlayer" type="AudioStreamPlayer" parent="Playing/female"]
 unique_name_in_owner = true
+
+[node name="Puppet" type="Node3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1.8, 0, 0)
+
+[node name="Avatar" type="XRNode3D" parent="Puppet"]
+transform = Transform3D(0.999311, 0, 0.0371093, 0, 1, 0, -0.0371093, 0, 0.999311, -0.0089581, 0, -0.0917108)
+tracker = &"/streaming/body_tracker"
+
+[node name="Test-Kun" parent="Puppet/Avatar" instance=ExtResource("10_c8qoa")]
+
+[node name="XRBodyModifier3D" type="XRBodyModifier3D" parent="Puppet/Avatar/Test-Kun/Armature/Skeleton3D" index="2"]
+body_tracker = &"/streaming/body_tracker"
+bone_update = 1
+
+[node name="Label3D" type="Label3D" parent="Puppet/Avatar/Test-Kun/Armature/Skeleton3D" index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+billboard = 2
+text = "Puppet"
+
+[node name="XRFaceModifier3D" type="XRFaceModifier3D" parent="Puppet/Avatar"]
+face_tracker = &"/streaming/face_tracker"
+target = NodePath("../Test-Kun/Armature/Skeleton3D/Body")
+
+[node name="GroundRing" type="MeshInstance3D" parent="Puppet/Avatar"]
+mesh = SubResource("TorusMesh_hgul2")
+skeleton = NodePath("")
+
+[node name="Forward" type="MeshInstance3D" parent="Puppet/Avatar/GroundRing"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, -0.6)
+mesh = SubResource("SphereMesh_ouj5y")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 anchors_preset = 3
@@ -304,3 +341,4 @@ use_native_dialog = true
 [editable path="Tracking/Avatar/Test-Chan"]
 [editable path="Mixing/Avatar/male"]
 [editable path="Playing/female"]
+[editable path="Puppet/Avatar/Test-Kun"]

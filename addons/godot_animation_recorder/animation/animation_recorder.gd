@@ -8,121 +8,6 @@ extends Node
 ## an avatar and inspecting the bones and facial blend-shapes.
 
 
-# Names of Godot Humanoid Bones
-const _BONES_GODOT_HUMANOID : Array[String] = [
-	"Root",
-	"Hips",
-	"Spine",
-	"Chest",
-	"UpperChest",
-	"Neck",
-	"Head",
-	"LeftEye",
-	"RightEye",
-	"LeftShoulder",
-	"LeftUpperArm",
-	"LeftLowerArm",
-	"LeftHand",
-	"LeftThumbMetacarpal",
-	"LeftThumbProximal",
-	"LeftThumbDistal",
-	"LeftIndexProximal",
-	"LeftIndexIntermediate",
-	"LeftIndexDistal",
-	"LeftMiddleProximal",
-	"LeftMiddleIntermediate",
-	"LeftMiddleDistal",
-	"LeftRingProximal",
-	"LeftRingIntermediate",
-	"LeftRingDistal",
-	"LeftLittleProximal",
-	"LeftLittleIntermediate",
-	"LeftLittleDistal",
-	"RightShoulder",
-	"RightUpperArm",
-	"RightLowerArm",
-	"RightHand",
-	"RightThumbMetacarpal",
-	"RightThumbProximal",
-	"RightThumbDistal",
-	"RightIndexProximal",
-	"RightIndexIntermediate",
-	"RightIndexDistal",
-	"RightMiddleProximal",
-	"RightMiddleIntermediate",
-	"RightMiddleDistal",
-	"RightRingProximal",
-	"RightRingIntermediate",
-	"RightRingDistal",
-	"RightLittleProximal",
-	"RightLittleIntermediate",
-	"RightLittleDistal",
-	"LeftUpperLeg",
-	"LeftLowerLeg",
-	"LeftFoot",
-	"LeftToes",
-	"RightUpperLeg",
-	"RightLowerLeg",
-	"RightFoot",
-	"RightToes"
-]
-
-# Names of 52 blend-shapes (lowercase and no separators)
-const _FACE_52_BLENDSHAPES : Array[String] = [
-	"browinnerup",
-	"browdownleft",
-	"browdownright",
-	"browouterupleft",
-	"browouterupright",
-	"eyelookupleft",
-	"eyelookupright",
-	"eyelookdownleft",
-	"eyelookdownright",
-	"eyelookinleft",
-	"eyelookinright",
-	"eyelookoutleft",
-	"eyelookoutright",
-	"eyeblinkleft",
-	"eyeblinkright",
-	"eyesquintleft",
-	"eyesquintright",
-	"eyewideleft",
-	"eyewideright",
-	"cheekpuff",
-	"cheeksquintleft",
-	"cheeksquintright",
-	"nosesneerleft",
-	"nosesneerright",
-	"jawopen",
-	"jawforward",
-	"jawleft",
-	"jawright",
-	"mouthfunnel",
-	"mouthpucker",
-	"mouthleft",
-	"mouthright",
-	"mouthrollupper",
-	"mouthrolllower",
-	"mouthshrugupper",
-	"mouthshruglower",
-	"mouthclose",
-	"mouthsmileleft",
-	"mouthsmileright",
-	"mouthfrownleft",
-	"mouthfrownright",
-	"mouthdimpleleft",
-	"mouthdimpleright",
-	"mouthupperupleft",
-	"mouthupperupright",
-	"mouthlowerdownleft",
-	"mouthlowerdownright",
-	"mouthpressleft",
-	"mouthpressright",
-	"mouthstretchleft",
-	"mouthstretchright"
-]
-
-
 ## Skeleton node
 @export var skeleton : Skeleton3D
 
@@ -260,7 +145,7 @@ func _populate_skeleton_tracks() -> void:
 		var path := NodePath("%GeneralSkeleton:" + bone_name)
 
 		# Skip if only humanoid bones and this isn't a humanoid bone
-		if only_godot_humanoid_bones and not _BONES_GODOT_HUMANOID.has(bone_name):
+		if only_godot_humanoid_bones and not GodotXRBodyData.is_body_bone(bone_name):
 			continue
 
 		# Add position tracks for root bones and hips
@@ -289,8 +174,7 @@ func _populate_face_tracks() -> void:
 		var path := NodePath(String(node_path) + ":" + blend_name)
 
 		# Skip if only 52 blend-shapes and this isn't a 52 blend-shape
-		var lower_name := blend_name.to_lower().replace("_", "");
-		if only_52_blendshapes and not _FACE_52_BLENDSHAPES.has(lower_name):
+		if only_52_blendshapes and not GodotXRBodyData.is_face_blend_52(blend_name):
 			continue
 
 		# Add the blend-shape track
